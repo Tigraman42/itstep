@@ -6,6 +6,7 @@ class Student:
         self.name = name
         self.gladness = 50
         self.progress = 0
+        self.money = 0
         self.alive = True
 
     def to_study(self):
@@ -37,6 +38,13 @@ class Student:
         print(f"gladness = {self.gladness}")
         print(f"progress = {round(self.progress)}")
 
+    def to_operate(self):
+        if self.money <= 10:
+            print("time to operate")
+            self.progress += 0.10
+            self.gladness += 1
+            self.money += 200
+
     def live(self, day):
         day = "Day" + str(day) + "of" + self.name + "life"
         print(f"{day:=^50}")
@@ -47,6 +55,8 @@ class Student:
             self.to_sleep()
         elif live_cube == 3:
             self.to_chill()
+        elif live_cube == 10:
+            self.to_operate()
 
         self.end_of_day()
         self.is_alive()
