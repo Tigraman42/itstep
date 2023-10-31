@@ -1,7 +1,7 @@
 import random
 
 class Human:
-    def __init__(self, name="Human", job=None, home=None, car=None):
+    def __init__(self, name="Human", job=None, home=None, car=None, body=None):
         self.name = name
         self.money = 100
         self.gladness = 50
@@ -9,6 +9,10 @@ class Human:
         self.job = job
         self.home = home
         self.car = car
+        self.body = body
+        self.weight = 55
+        self.muscle_mass = 45
+
 
     def eat(self):
         if self.home.food <= 0:
@@ -19,6 +23,15 @@ class Human:
             return
         self.satiety += 5
         self.home.food -= 5
+        if self.body <= 0:
+            self.eat()
+        else:
+            if self.weight >= 20:
+                self.body = 20
+                return
+            self.weight += 0,3
+            self.muscle_mass += 0,3
+            self.home.food -= 3
 
     def work(self):
         if self.car.drive():
@@ -69,6 +82,10 @@ class Human:
         self.car.strength += 100
         self.money -= 50
 
+    def get_gym(self):
+        self.weight -= 0.4
+        self.muscle_mass += 0.4
+
     # get methods
     def get_home(self):
         self.home = House()
@@ -101,6 +118,10 @@ class Human:
         print(f"{car_indexes:^50}", "\n")
         print(f"Fuel – {self.car.fuel}")
         print(f"Strength – {self.car.strength}")
+        body_indexes = "Body indexes"
+        print(f"{body_indexes:^50}", "\n")
+        print(f"Weight - {self.weight}")
+        print(f"Muscle_mass - {self.muscle_mass}")
 
     def is_alive(self):
         if self.gladness < 0:
@@ -112,6 +133,13 @@ class Human:
         if self.money < -500:
             print("Bankrupt…")
             return False
+        if self.weight < 0:
+            print("I'm very skinny. Have to gain weight")
+            return False
+        if self.muscle_mass < 0:
+            print("Apparently I got myself into trouble..")
+            return False
+
 
     def live(self, day):
         if self.is_alive() == False:
@@ -125,10 +153,14 @@ class Human:
         if self.job is None:
             self.get_job()
             print(f"I don't have a job, I'm going to get a job {self.job.job} with salary {self.job.salary}")
+        if self.body is None:
+            self.get_gym()
+            print(f"Need to go to the gym")
+
 
         self.days_indexes(day)
 
-        dice = random.randint(1, 4)
+        dice = random.randint(1, 5)
 
         if self.satiety < 20:
             print("I'll go eat")
@@ -154,6 +186,9 @@ class Human:
             self.work()
         elif dice == 3:
             print("Cleaning time!")
+        elif dice == 4:
+            print("Time to hit the gym!")
+            self.get_gym()
 
 #CAR
 
@@ -179,6 +214,11 @@ brands_of_car = {
     "Volvo": {"fuel": 70, "strength": 150, "consumption": 8},
     "Ferrari": {"fuel": 80, "strength": 120, "consumption": 14},
 }
+
+class Вody:
+    def __init__(self):
+        self.weight = 55
+        self.muscle_mass = 45
 
 #House
 
