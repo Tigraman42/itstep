@@ -1,25 +1,55 @@
 import requests
 
-response = requests.get("https://coinmarketcap.com/")
+class CurrencyConverter:
 
-response_text = response.text
+   def __init__(self):
 
-response_parse = response_text.split("<span>")
+       self.rates = {}
 
-coins = []
+   def get_rates(self):
 
-for item in response_parse:
-    if item.startswith("$"):
-        for coin_item in item.split("</span>"):
-            if coin_item.startswith("$") and  coin_item[1].isdigit():
-                coins.append(coin_item)
+       response = requests.get("https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json")
 
-print(coins)
-print("Coin exchange rate -", coins[0])
+       data = response.json()
 
-bitcoin = int(input("How much bitcoins do you have? "))
+       for item in data:
 
-bitcoin_str = coins[0][1:]
-bitcoin_rate = float(bitcoin_str.replace(",", ""))
+           self.rates[item['cc']] = item['rate']
 
-print("You have: $", bitcoin * bitcoin_rate)
+   def convert(self, amount, from_currency, to_currency):
+
+       if from_currency != "USD":
+
+           amount = amount / self.rates[from_currency]
+
+       amount = round(amount * self.rates[to_currency], 2)
+
+       return amount
+
+converter = CurrencyConverter()
+
+converter.get_rates()
+
+while True:
+
+   try:
+
+       amount = float(input("Enter the amount of currency: "))
+
+       from_currency = input("Enter the currency code of the amount you entered: ")
+
+       to_currency = "USD"
+
+       converted_amount = converter.convert(amount, from_currency.upper(), to_currency)
+
+       print("The amount of {} {} is equal to {:.2f} USD".format(amount, from_currency.upper(), converted_amount))
+
+       break
+
+   except KeyError:
+
+       print("Invalid currency code entered. Please try again.")
+
+   except ValueError:
+
+       print("Invalid amount entered. Please try again.")
