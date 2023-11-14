@@ -244,3 +244,4 @@ nick = Human(name="Nick")
 for day in range(366):
     if nick.live(day) == False:
         break
+

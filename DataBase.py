@@ -1,15 +1,42 @@
+import requests
+
+from bs4 import BeautifulSoup
+
 import sqlite3
 
-connection = sqlite3.connect("itstep.sl3", 5)
-
-cur = connection.cursor()
+from datetime import datetime
 
 
-#cur.execute("SELECT rowid, user_name FROM users;")
-cur.execute("UPDATE users SET email='new@u.a' where rowid=4;")
-connection.commit()
 
-#res = cur.fetchall()
-#print(res)
+conn = sqlite3.connect('weather.db')
 
-connection.close()
+c = conn.cursor()
+
+
+
+c.execute('''CREATE TABLE IF NOT EXISTS weather
+
+            (date_time text, temperature real)''')
+
+
+
+url = 'https://www.meteoprog.ua/ua/weather/Kyiv/'
+
+response = requests.get(url)
+
+soup = BeautifulSoup(response.content, 'html.parser')
+
+temperature = soup.find('span', class_='temp').get_text()
+
+
+
+now = datetime.now()
+
+date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+
+c.execute("INSERT INTO weather (date_time, temperature) VALUES (?, ?)", (date_time, temperature))
+
+conn.commit()
+
+
+conn.close()
