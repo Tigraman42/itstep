@@ -1,7 +1,7 @@
 import cv2
 from PIL import Image
 
-image_path = 'cat3.jpg'
+image_path = '../cat3.jpg'
 
 image = cv2.imread(image_path)
 
@@ -12,7 +12,7 @@ cat_face = cat_face_cascade.detectMultiScale(image)
 
 print(cat_face)
 
-glasses = Image.open('glasses2.png')
+glasses = Image.open('../glasses2.png')
 cat = Image.open(image_path)
 
 cat = cat.convert("RGBA")
