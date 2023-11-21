@@ -20,7 +20,7 @@ glasses = glasses.convert("RGBA")
 
 for (x, y, width, height) in cat_face:
     glasses = glasses.resize((width, int(height/3)))
-    cat.paste(glasses, (x, int(y+height/4)), glasses)
+    cat.paste(glasses, (x, int(y+height/3)), glasses)
     cat.save("cat`s_with_glasses.png")
     cat_with_glasses = cv2.imread("cat`s_with_glasses.png")
     cv2.imshow("Cat`s with glasses", cat_with_glasses)
